@@ -43,13 +43,36 @@ class DataModelController extends Controller
 
     public function resetTTL($pairValues)
     {
-        foreach ($pairValues as $pair) {
+        foreach ($pairValues as $pair)
             $pair->resetTTL();
-        }
+
+        return;
     }
 
-    public function storePairValues(Request $request)
+    public function store(Request $request)
     {
+        $response = array();
 
+        foreach ($request->all() as $key => $value)
+            $response[$key] = DataModel::addPair(['key' => $key, 'value' => $value]);
+
+        return response()->json([
+            'status' => 200,
+            'data_status' => $response,
+        ]);
+    }
+
+    public function update(Request $request)
+    {
+        DataModel::removeOverTTL();
+        $response = array();
+
+        foreach ($request->all() as $key => $pair)
+            $response[$key] = DataModel::updatePair(['key' => $key, 'value' => $pair]);
+
+        return response()->json([
+            'status' => 200,
+            'data_status' => $response,
+        ]);
     }
 }

@@ -18,3 +18,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('/values', 'DataModelController@index');
+Route::post('/values', 'DataModelController@store');
+Route::patch('/values', 'DataModelController@update');

@@ -11,6 +11,12 @@ class DataModel extends Model
 
     public static function addPair($pairValues)
     {
+        if (!is_null(self::where('key', $pairValues['key'])->first()))
+            return 409;
+        
+        if (strlen($pairValues['value']) >= 16777215)
+            return 413;
+
         if (!array_key_exists('ttl', $pairValues))
             $pairValues['ttl'] = '5 mins';
         else
@@ -20,7 +26,22 @@ class DataModel extends Model
         $pairValues['delete_time'] = Carbon::parse($pairValues['ttl'])->toDateTimeString();
         self::create($pairValues);
 
-        return;
+        return 201;
+    }
+
+    public static function updatePair($pairValues)
+    {
+        if (is_null(self::where('key', $pairValues['key'])->first()))
+            return 404;
+        
+        if (strlen($pairValues['value']) >= 16777215)
+            return 413;
+
+        $pair = self::where('key', $pairValues['key'])->first();
+        $pair->value = $pairValues['value'];
+        $pair->save();
+
+        return 202;
     }
 
     public function resetTTL()
