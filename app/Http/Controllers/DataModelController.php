@@ -12,12 +12,11 @@ class DataModelController extends Controller
     {
         $pairValues = $this->getPairValues($request->keys);
         $this->resetTTL($pairValues);
+        $response['status'] = $this->getStatus($request->keys, $pairValues);
+        $pairValues = $pairValues->pluck('value', 'key')->toArray();
+        $response = array_merge($response, $pairValues);
 
-        return response()->json([
-            'status' => $this->getStatus($request->keys, $pairValues),
-            'count' => count($pairValues),
-            'data' => $pairValues->pluck('value', 'key')->toArray()
-        ]);
+        return response()->json($response);
     }
 
     public function getPairValues($keys)
