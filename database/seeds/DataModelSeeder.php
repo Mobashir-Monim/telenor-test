@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Carbon\Carbon;
 
 class DataModelSeeder extends Seeder
 {
@@ -11,9 +12,9 @@ class DataModelSeeder extends Seeder
      */
     public function run()
     {
-        for ($i = 0; $i < rand(10, 100); $i++) {
-            $pairValue = ['key' => "key$i", 'value' => "value$i"];
-            App\DataModel::addPair($pairValue);
+        for ($i = 0; $i < rand(1900, 2000); $i++) {
+            $pairValue = ['key' => "key$i", 'value' => "value$i", 'ttl' => '5 mins', 'delete_time' => Carbon::now()->addSeconds(rand(-300, 300))->toDateTimeString()];
+            App\DataModel::create($pairValue);
         }
     }
 }

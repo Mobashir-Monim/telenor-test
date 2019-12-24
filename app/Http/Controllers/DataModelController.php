@@ -10,16 +10,20 @@ class DataModelController extends Controller
 {
     public function index(Request $request)
     {
-        $pairValues = $this->getPairValues($request->keys)->pluck('value', 'key')->toArray();
+        $pairValues = $this->getPairValues($request->keys);
+        $this->resetTTL($pairValues);
 
         return response()->json([
             'status' => $this->getStatus($request->keys, $pairValues),
-            'data' => $pairValues
+            'count' => count($pairValues),
+            'data' => $pairValues->pluck('value', 'key')->toArray()
         ]);
     }
 
     public function getPairValues($keys)
     {
+        DataModel::removeOverTTL();
+
         if (is_null($keys))
             return DataModel::all();
 
@@ -35,5 +39,17 @@ class DataModelController extends Controller
             return 200;
 
         return 206;
+    }
+
+    public function resetTTL($pairValues)
+    {
+        foreach ($pairValues as $pair) {
+            $pair->resetTTL();
+        }
+    }
+
+    public function storePairValues(Request $request)
+    {
+
     }
 }

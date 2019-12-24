@@ -16,6 +16,5 @@ Route::get('/', function () {
 });
 
 Route::get('/test', function () {
-    $pairValues = ['key' => 'key1', 'value' => 'value1'];
-    dd(App\DataModel::addPair($pairValues));
+    dd(Carbon\Carbon::parse('2019-12-24 11:23:00')->diffInSeconds(Carbon\Carbon::now(), false), Carbon\Carbon::now()->toDateTimeString());
 })->name('test');

@@ -16,7 +16,7 @@ class CreateDataModelsTable extends Migration
         Schema::create('data_models', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('key');
-            $table->string('value');
+            $table->mediumText('value');
             $table->string('ttl');
             $table->datetime('delete_time');
             $table->timestamps();
