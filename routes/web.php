@@ -14,3 +14,8 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/test', function () {
+    $pairValues = ['key' => 'key1', 'value' => 'value1'];
+    dd(App\DataModel::addPair($pairValues));
+});
